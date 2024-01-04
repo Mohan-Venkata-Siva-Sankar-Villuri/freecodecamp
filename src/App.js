@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import SignIn from "./components/SignIn";
+import Courses from "./components/Courses";
+import axios from "axios";
+import Header from "./components/Header";
+import Home from "./components/Home";
 
 function App() {
+  useEffect(() => {
+    // Check for JWT token in local storage
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      // Set the token in the axios headers for every request
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <div className="bg-[#F5F6F7] h-[100vh]">
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/courses" element={<Courses />} />
+          </Routes>
+        </Router>
+      </div>
+    </>
   );
 }
 
